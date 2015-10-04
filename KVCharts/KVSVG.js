@@ -51,8 +51,8 @@ var KVSVG = (function(window, document){
          * @description
          * To draw a svg text tag with properties
          *
-         * @param none
-         * @returns svg tag with properties and content.
+         * @param classx {string}, x {float}, y {float}, fontSize {int}, text {string}, transform {string}
+         * @returns svg text tag with properties and content.
          */
         drawText: function(classx, x, y, colour, fontSize, text, transform)
         {
@@ -64,6 +64,48 @@ var KVSVG = (function(window, document){
                 transform = (transform !== undefined && transform !== null)? 'transform="'+transform+'"' : '';
                 //draw text svg
                 return '<text class="'+classx+'" '+x+' '+y+' '+transform+' style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+text+' </text>';
+            }
+            return '';
+        },
+
+        /**
+         * @name drawLine
+         * @description
+         * To draw a svg line tag with properties
+         *
+         * @param classx {string}, x1 {float}, y1 {float}, x2 {float}, y2 {float}, lineColour {string}, strokeWidth {int}, dottedLines {bool}
+         * @returns svg line tag with properties.
+         */
+        drawLine: function(classx, x1, y1, x2, y2, lineColour, strokeWidth, dottedLines)
+        {
+            //check if x1, x2, y1, y2 are defined and that they are numbers
+            var x1t = (x1 !== undefined && !isNaN(parseFloat(x1)) && isFinite(x1))? 'x1 = "'+x1+'"': '';
+            var y1t = (y1 !== undefined && !isNaN(parseFloat(y1)) && isFinite(y1))? 'y1 = "'+y1+'"': '';
+            var x2t = (x2 !== undefined && !isNaN(parseFloat(x2)) && isFinite(x2))? 'x2 = "'+x2+'"': '';
+            var y2t = (y2 !== undefined && !isNaN(parseFloat(y2)) && isFinite(y2))? 'y2 = "'+y2+'"': '';
+            dottedLines = (dottedLines)? 'stroke-dasharray="3,3"': '';
+
+            if(x1 > 0 || x2 > 0 || y1 > 0 || y2 > 0)
+            {
+                return '<line  class="'+classx+'" '+dottedLines+' '+x1t+'  '+y1t+' '+x2t+' '+y2t+' style="stroke:'+lineColour+';stroke-width:'+strokeWidth+'"></line>';
+            }
+            return '';
+
+        },
+
+        /**
+         * @name drawGroup
+         * @description
+         * To draw a svg group tag with properties that will hold many other svg tags
+         *
+         * @param classx {string}, tx {float}, ty {float}, content {string}
+         * @returns a group svg tag with properties
+         */
+        drawGroup: function(classx, tx, ty, content)
+        {
+            if(content !== undefined && typeof content === 'string' && content.length > 0)
+            {
+                return '<g class="'+classx+'" transform="translate('+tx+' '+ty+')">'+ content +'</g>';
             }
             return '';
         }

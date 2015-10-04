@@ -11,6 +11,12 @@ var options = {
     "title": {
         "text": "Mergermarket Companies",
         "fontSize": 28
+    },
+    "xAxis": {
+        "name": "Incorporation Date (Year)",
+        "key": "incopDate",
+        "type": "date",
+        "grid": false
     }
 };
 function init()

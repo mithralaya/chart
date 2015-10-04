@@ -8,7 +8,13 @@ describe("Chart Title", function() {
     });
     describe("SVG tag", function(){
         it("undefined content should return empty string", function() {
-            var options = {};
+            var options = {
+                "xAxis": {
+                "name": "Incorporation Date (Year)",
+                    "key": "incopDate",
+                    "type": "date",
+                    "grid": false
+            }};
             var chart = new KVBubbleChart(options, element);
 
             var output  = '';
@@ -21,6 +27,12 @@ describe("Chart Title", function() {
             var options = {
                 title: {
                     "text": null
+                },
+                "xAxis": {
+                    "name": "Incorporation Date (Year)",
+                    "key": "incopDate",
+                    "type": "date",
+                    "grid": false
                 }
             };
 
@@ -36,6 +48,12 @@ describe("Chart Title", function() {
             var options = {
                 title: {
                     "text": 20
+                },
+                "xAxis": {
+                    "name": "Incorporation Date (Year)",
+                    "key": "incopDate",
+                    "type": "date",
+                    "grid": false
                 }
             };
             var chart = new KVBubbleChart(options, element);
@@ -47,17 +65,23 @@ describe("Chart Title", function() {
 
         it("should return the text element and x & y as integer positions if we pass float value", function() {
 
-                classx = "test";
-                colour = "#ffffff";
-                fontSize = 19;
-                x = 50.55;
-                y = 50.55;
+                var classx = "test",
+                colour = "#ffffff",
+                fontSize = 19,
+                x = 50.55,
+                y = 50.55,
 
-            var options = {
-                title: {
-                    "text": "Awesome"
-                }
-            };
+                options = {
+                    title: {
+                        "text": "Awesome"
+                    },
+                    "xAxis": {
+                        "name": "Incorporation Date (Year)",
+                        "key": "incopDate",
+                        "type": "date",
+                        "grid": false
+                    }
+                };
             var chart = new KVBubbleChart(options, element);
             var output  = '<text class="'+classx+'" x = "50" y = "50"  style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+options.title.text+' </text>';
 
@@ -75,7 +99,13 @@ describe("Chart Title", function() {
             var options = {
                 title: {
                     "text": 20
-                }
+                },
+                "xAxis": {
+                "name": "Incorporation Date (Year)",
+                    "key": "incopDate",
+                    "type": "date",
+                    "grid": false
+            }
             };
             var chart = new KVBubbleChart(options, element);
 

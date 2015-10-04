@@ -20,9 +20,20 @@ var KVBubbleChart = (function(window, document){
         DEFAULT_CHART_TITLE_FONT_SIZE           = 28,
         //default text colour for chart title
         DEFAULT_TITLE_TEXT_COLOUR               = "#333333",
+        //default starting x position of x axis
+        X_AXIS_START_POINT                      = 75,
+        //default starting x position of x axis
+        Y_AXIS_START_POINT                      = X_AXIS_START_POINT,
+
+
+        DEFUALT_LEGEND_COLOURS                  = ["#FFB347", "#B19CD9", "#3a7bd5", "#D73E68", "#03C03C", "#C23B22", "#CB99C9", "#FFD1DC"],
+        DEFAULT_AXIS_LINE_COLOUR                = "#aaaaaa",
+
 
         //chart title class name
-        CHART_TITLE_CLASS                       = "chartTitle";
+        CHART_TITLE_CLASS                       = "chartTitle",
+        CHART_XAXIS_LINE_CLASS                  = "xAxisLine",
+        CHART_XAXIS_GROUP_CLASS                 = "CHART_XAXIS_GROUP_CLASS"
 
 
 
@@ -39,6 +50,7 @@ var KVBubbleChart = (function(window, document){
 
         this.svg            = new KVSVG();      //declare a global svg class
         this.title          = options.title;    //chart title options
+        this.xAxis          = options.xAxis;
         this.element        = element;          //declaring element object where this chart gonna sit
 
         this.build(); //build all svgs and
@@ -73,6 +85,35 @@ var KVBubbleChart = (function(window, document){
                 return this.svg.drawText(CHART_TITLE_CLASS, undefined, 35, textColour, fontSize, this.title.text);
             }
             return '';
+        },
+
+        /**
+         * @name chartXAxis
+         * @description
+         * To draw all elements of x axis
+         *
+         * @param none
+         * @returns svg title text tag with properties and content.
+         */
+        chartXAxis: function()
+        {
+            var windowWidth = window.innerWidth,
+                x1 = X_AXIS_START_POINT,
+                //yaxis length should be 1/3 of xaxis length
+                y1 = windowWidth * 0.3,
+                //dynamic length of x axis
+                x2 = window.innerWidth - Y_AXIS_START_POINT,
+                y2 = y1,
+                //pick default of user supplied line colour
+                lineColour = (this.xAxis.lineColour !== undefined)? this.xAxis.lineColour: DEFAULT_AXIS_LINE_COLOUR;
+
+
+            //draw xaxis line
+            var html = this.svg.drawLine(CHART_XAXIS_LINE_CLASS, x1, y1, x2, y2, lineColour, 2);
+
+            html = this.svg.drawGroup(CHART_XAXIS_GROUP_CLASS, 0, 0, html);
+
+            return html;
         },
 
         /**
@@ -135,7 +176,7 @@ var KVBubbleChart = (function(window, document){
         {
             //reset inner html of the element before plotting
             this.element.innerHTML   = "";
-            var html = this.chartTitle();
+            var html = this.chartTitle() + this.chartXAxis();
             this.element.innerHTML = this.svg.drawSVG(DEFAULT_FONT_FAMILY, html);
         }
     };

@@ -71,4 +71,61 @@ describe("SVG", function() {
 
 
     });
+
+    describe("Group tag", function(){
+        beforeAll(function() {
+            classx = "test",
+            tx=10, ty=10;
+        });
+        it("should return empty string", function() {
+
+            var content;
+            var output  = '';
+
+            expect(svgClass.drawGroup(classx, tx, ty, content)).toBe(output);
+        });
+        it("should return empty string", function() {
+
+            var content = null;
+            var output  = '';
+
+            expect(svgClass.drawGroup(classx, tx, ty, content)).toBe(output);
+        });
+        it("should return empty string", function() {
+
+            var content = "";
+            var output  = '';
+
+            expect(svgClass.drawGroup(classx, tx, ty, content)).toBe(output);
+        });
+        it("should return the group svg element", function() {
+
+            var content = "test";
+            var output  = '<g class="'+classx+'" transform="translate('+tx+' '+ty+')">'+ content +'</g>';
+
+            expect(svgClass.drawGroup(classx, tx, ty, content)).toBe(output);
+        });
+
+    });
+
+    describe("Line tag", function(){
+        beforeAll(function() {
+            classx = "test", lineColour = "#ff0000", strokeWidth=2,
+                x1=10, x2=10, y1=10, y2=10;
+        });
+        it("should return empty string", function() {
+
+            var output  = '';
+
+            expect(svgClass.drawLine(classx, 0, 0, 0, 0, lineColour, strokeWidth)).toBe(output);
+        });
+
+        it("should return the group svg element", function() {
+
+            var output  = '<line  class="'+classx+'"  x1 = "'+x1+'"  y1 = "'+y1+'" x2 = "'+x2+'" y2 = "'+y2+'" style="stroke:'+lineColour+';stroke-width:'+strokeWidth+'"></line>';
+
+            expect(svgClass.drawLine(classx, x1, y1, x2, y2, lineColour, strokeWidth)).toBe(output);
+        });
+
+    });
 });
