@@ -130,6 +130,7 @@ var KVBubbleChart = (function(window, document){
         align: function()
         {
             this.alignChartTitle();
+            this.alignXAxisTitle();
         },
 
         /**
@@ -147,6 +148,23 @@ var KVBubbleChart = (function(window, document){
             {
                 chartTitleElement[0].setAttribute("x", this.getCentreForTitle(window, chartTitleElement[0]));
             }
+        },
+
+        /**
+         * @name alignXAxisTitle
+         * @description
+         * To set xaxis title text to align with the end of xAxis line
+         *
+         * @param none
+         * @returns none.
+         */
+        alignXAxisTitle: function()
+        {
+            var xAxisTitle = document.getElementsByClassName(CHART_XAXIS_TITLE_CLASS)[0],
+                xAxisLength = parseInt(document.getElementsByClassName(CHART_XAXIS_LINE_CLASS)[0].getAttribute("x2")),
+                xAxisTitleWidth = parseInt(xAxisTitle.offsetWidth);
+
+            xAxisTitle.setAttribute("x", (xAxisLength - xAxisTitleWidth));
         },
 
         /**
