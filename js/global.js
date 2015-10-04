@@ -23,3 +23,6 @@ function init()
 {
     new KVBubbleChart(options, document.getElementById("bubbleChart"));
 }
+
+
+window.onresize = function(){init()};
