@@ -42,6 +42,7 @@ var KVBubbleChart = (function(window, document){
         this.element        = element;          //declaring element object where this chart gonna sit
 
         this.build(); //build all svgs and
+        this.align(); //align chart elements
     };
 
     /**
@@ -75,7 +76,55 @@ var KVBubbleChart = (function(window, document){
         },
 
         /**
-         * @name chartTite
+         * @name align
+         * @description
+         * To align all chart elements to its right positions
+         *
+         * @param none
+         * @returns none.
+         */
+        align: function()
+        {
+            this.alignChartTitle();
+        },
+
+        /**
+         * @name alignChartTitle
+         * @description
+         * To set title text the x attribute to centrally align to the page
+         *
+         * @param none
+         * @returns none.
+         */
+        alignChartTitle: function()
+        {
+            var chartTitleElement = document.getElementsByClassName(CHART_TITLE_CLASS);
+            if(chartTitleElement.length > 0)
+            {
+                chartTitleElement[0].setAttribute("x", this.getCentreForTitle(window, chartTitleElement[0]));
+            }
+        },
+
+        /**
+         * @name getCentreForTitle
+         * @description
+         * To find a centre aligned text x position using window width and element width
+         *
+         * @param win {object}, element {object}
+         * @returns x position of any text to be centrally aligned to the page.
+         */
+        getCentreForTitle: function(win, element)
+        {
+            var windowWidth = win.innerWidth,
+                elementWidth = element.offsetWidth,
+
+                centre = (windowWidth/2) - (elementWidth/2);
+
+            return centre;
+        },
+
+        /**
+         * @name build
          * @description
          * To draw the entire chart by combining the parts
          *

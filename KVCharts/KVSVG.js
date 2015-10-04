@@ -29,7 +29,7 @@ var KVSVG = (function(window, document){
     KVSVG.prototype = {
 
         /**
-         * @name chartTite
+         * @name drawSVG
          * @description
          * To draw a svg scaffold to wrap all svg element
          *
@@ -47,7 +47,7 @@ var KVSVG = (function(window, document){
         },
 
         /**
-         * @name chartTite
+         * @name drawText
          * @description
          * To draw a svg text tag with properties
          *
