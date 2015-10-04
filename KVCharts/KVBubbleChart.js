@@ -29,13 +29,15 @@ var KVBubbleChart = (function(window, document){
         DEFUALT_LEGEND_COLOURS                  = ["#FFB347", "#B19CD9", "#3a7bd5", "#D73E68", "#03C03C", "#C23B22", "#CB99C9", "#FFD1DC"],
         DEFAULT_AXIS_LINE_COLOUR                = "#aaaaaa",
         DEFAULT_AXIS_TEXT_COLOUR                = "#999999",
+        DEFAULT_AXIS_NAME_COLOUR                = "#cccccc",
 
 
         //chart title class name
         CHART_TITLE_CLASS                       = "chartTitle",
         CHART_XAXIS_LINE_CLASS                  = "xAxisLine",
         CHART_XAXIS_GROUP_CLASS                 = "CHART_XAXIS_GROUP_CLASS",
-        CHART_XAXIS_TITLE_CLASS                 = "xAxisTitle";
+        CHART_XAXIS_TITLE_CLASS                 = "xAxisTitle",
+        CHART_XAXIS_NAME_CLASS                  = "xAxisName";
 
 
 
@@ -114,6 +116,7 @@ var KVBubbleChart = (function(window, document){
             var html = this.svg.drawLine(CHART_XAXIS_LINE_CLASS, x1, y1, x2, y2, lineColour, 2);
             html += this.svg.drawText(CHART_XAXIS_TITLE_CLASS, (x2-200), (y1-7), DEFAULT_AXIS_TEXT_COLOUR,
                 16, this.xAxis.name.toUpperCase());
+            html += this.svg.drawText(CHART_XAXIS_NAME_CLASS, (x2+20), (y1+5), DEFAULT_AXIS_NAME_COLOUR, 18, "x");
             html = this.svg.drawGroup(CHART_XAXIS_GROUP_CLASS, 0, 0, html);
 
             return html;
