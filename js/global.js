@@ -6,8 +6,14 @@
  * Global JS which will load on index.html
  */
 
-var options = {};
+var options = {
+    "fontFamily": "'HelveticaNeue-Light', Arial, sans-serif",
+    "title": {
+        "text": "Mergermarket Companies",
+        "fontSize": 28
+    }
+};
 function init()
 {
-    new KVBubbleChart(options);
+    new KVBubbleChart(options, document.getElementById("bubbleChart"));
 }
