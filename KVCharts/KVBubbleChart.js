@@ -19,15 +19,18 @@ var KVBubbleChart = (function(window, document){
      */
     var KVBubbleChart = function(options)
     {
-
+        console.log("test");
     };
 
     /**
-     * @type KVBubbleChart prototypes public functions
+     * @description
+     * KVBubbleChart prototypes public functions
      */
     KVBubbleChart.prototype =
     {
 
-    }
+    };
+
+    return KVBubbleChart;
 
 })(window, document);
