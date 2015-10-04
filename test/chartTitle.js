@@ -2,15 +2,15 @@
  * Created by karthikvasudevan on 07/09/15.
  */
 
-var bubbleChart = require('../KVCharts/KVBubbleChart');
-
 //test begins
 describe("Chart Title", function() {
-
+    beforeAll(function() {
+        element = document.getElementById("bubbleChart");
+    });
     describe("SVG tag", function(){
         it("undefined content should return empty string", function() {
             var options = {};
-            var chart = new bubbleChart(options, null);
+            var chart = new KVBubbleChart(options, element);
 
             var output  = '';
 
@@ -24,7 +24,7 @@ describe("Chart Title", function() {
                     "text": null
                 }
             };
-            var chart = new bubbleChart(options, null);
+            var chart = new KVBubbleChart(options, element);
 
             var output  = '';
 
@@ -38,7 +38,7 @@ describe("Chart Title", function() {
                     "text": 20
                 }
             };
-            var chart = new bubbleChart(options, null);
+            var chart = new KVBubbleChart(options, element);
 
             var output  = '';
 

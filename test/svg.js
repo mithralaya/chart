@@ -1,9 +1,7 @@
 /**
  * Created by karthikvasudevan on 07/09/15.
  */
-
-var svg = require('../KVCharts/KVSVG');
-var svgClass = new svg();
+var svgClass            = new KVSVG();
 
 //test begins
 describe("SVG", function() {
@@ -45,7 +43,7 @@ describe("SVG", function() {
         });
         it("x & y null should plot at 0, 0", function() {
 
-            var output  = '<text class="'+classx+'" style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+text+' </text>';
+            var output  = '<text class="'+classx+'"    style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+text+' </text>';
 
             expect(svgClass.drawText(classx, null, null, colour, fontSize, text)).toBe(output);
         });
@@ -66,7 +64,7 @@ describe("SVG", function() {
         it("should return the text element and x & y as integer positions if we pass float value", function() {
             var x = 50.55;
             var y = 50.55;
-            var output  = '<text class="'+classx+'" x="50" y="50" style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+text+' </text>';
+            var output  = '<text class="'+classx+'" x = "50" y = "50"  style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+text+' </text>';
 
             expect(svgClass.drawText(classx, x, y, colour, fontSize, text)).toBe(output);
         });

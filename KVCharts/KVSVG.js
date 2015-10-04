@@ -2,7 +2,7 @@
 
 /**
  * Created By Karthik Vasudevan
- * On 01/10/2015
+ * On 04/10/2015
  * A simple class to hold svg elements
  */
 
@@ -63,7 +63,7 @@ var KVSVG = (function(window, document){
                 y = (y !== undefined && !isNaN(parseFloat(y)) && isFinite(y))? 'y = "'+parseInt(y)+'"': '';
                 transform = (transform !== undefined && transform !== null)? 'transform="'+transform+'"' : '';
                 //draw text svg
-                return '<text class="'+classx+'" '+x+' '+y+' '+transform+' style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+text+' </text> ';
+                return '<text class="'+classx+'" '+x+' '+y+' '+transform+' style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+text+' </text>';
             }
             return '';
         }
