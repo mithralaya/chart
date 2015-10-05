@@ -17,6 +17,12 @@ var options = {
         "key": "incopDate",
         "type": "date",
         "grid": false
+    },
+    "yAxis": {
+        "name": "Revenue ($M)",
+        "key": "rev",
+        "type": "number",
+        "grid": true
     }
 };
 function init()
