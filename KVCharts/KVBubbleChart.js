@@ -60,7 +60,15 @@ var KVBubbleChart = (function(window, document){
         CHART_LEGEND_GROUP_CLASS                = "legendRef",
         CHART_UNIQUE_LEGEND_GROUP_CLASS         = "uniqueLegendRef",
         CHART_LEGEND_REF_TEXT_CLASS             = "legendRefText",
-        CHART_LEGEND_REF_COLOUR_CLASS           = "legendRefColour";
+        CHART_LEGEND_REF_COLOUR_CLASS           = "legendRefColour",
+        //bubbles
+        CHART_BUBBLE_CLASS                      = "bubble",
+        CHART_BUBBLE_GROUP_CLASS                = "bubbleGrp",
+        CHART_BUBBLE_ITEM_GROUP_CLASS           = "bubbleItemGrp",
+        CHART_BUBBLE_TOOLTIP_GROUP_CLASS        = "bubbleTooltip",
+        CHART_BUBBLE_TOOLTIP_TEXT_GROUP_CLASS   = "bubbleTooltipTextGrp",
+        CHART_BUBBLE_TOOLTIP_RECT_CLASS         = "bubbleTooltipRect",
+        CHART_BUBBLE_TOOLTIP_TEXT_CLASS         = "bubbleTooltipText";
 
 
 
@@ -80,6 +88,7 @@ var KVBubbleChart = (function(window, document){
         this.xAxis          = options.xAxis;    //xaxis options
         this.yAxis          = options.yAxis;    //yaxis options
         this.legend         = options.legend;   //legend options
+        this.bubble         = options.bubble;   //bubble opions
         this.data           = options.data;     //user data
         this.element        = element;          //declaring element object where this chart gonna sit
         this.xAxisPoints    = [];
@@ -270,6 +279,104 @@ var KVBubbleChart = (function(window, document){
                 html = this.svg.drawGroup(CHART_LEGEND_GROUP_CLASS, x, y+75, html);
 
             return html;
+        },
+
+        /**
+         * @name chartBubble
+         * @description
+         * To
+         *
+         * @param none
+         * @returns returns svg elements containing bubble and their tooltips to their exact position.
+         */
+        chartBubble: function()
+        {
+
+            var coord = this.bubbleCoordinates();
+            var tempHtml = '';
+
+            for(var coordKey in coord)
+            {
+                if(coord.hasOwnProperty(coordKey))
+                {
+                    //plot bubble
+                    var circle = this.svg.drawCircle(CHART_BUBBLE_CLASS +" animate "+this.bubble.bubbleAnimation, 0, 0
+                        , coord[coordKey].bubbleRadius, undefined, coord[coordKey].colour, 0.75);
+
+                    //plot tooltip
+
+                    var tooltipRect = this.svg.drawRect(CHART_BUBBLE_TOOLTIP_RECT_CLASS, 0, 0, 100, 200, 8, 8, '#333333', '#ffffff');
+                    var xValue = (this.xAxis.type === "date")? new Date(coord[coordKey].tooltip[this.xAxis.key]).getFullYear() : coord[coordKey].tooltip[this.xAxis.key];
+                    var tooltipText = this.svg.drawText(CHART_BUBBLE_TOOLTIP_TEXT_CLASS, 100, 120, '#333333', 12,  this.xAxis.name + ": " +xValue);
+                    tooltipText += this.svg.drawText(CHART_BUBBLE_TOOLTIP_TEXT_CLASS, 100, 140, '#333333', 12,  this.yAxis.name + ": " +coord[coordKey].tooltip[this.yAxis.key]);
+                    tooltipText += this.svg.drawText(CHART_BUBBLE_TOOLTIP_TEXT_CLASS, 100, 160, '#333333', 12,  this.bubble.name + ": " +coord[coordKey].tooltip[this.bubble.key]);
+                    tooltipText += this.svg.drawText(CHART_BUBBLE_TOOLTIP_TEXT_CLASS, 100, 180, '#333333', 12,  this.legend.name + ": " +coord[coordKey].tooltip[this.legend.key]);
+
+                    var tooltipTextGroup = this.svg.drawGroup(CHART_BUBBLE_TOOLTIP_TEXT_GROUP_CLASS, -85, -96, tooltipText);
+                    var tooltip = this.svg.drawGroup(CHART_BUBBLE_TOOLTIP_GROUP_CLASS, -100, -120, tooltipRect + tooltipTextGroup);
+                    tempHtml += this.svg.drawGroup(CHART_BUBBLE_ITEM_GROUP_CLASS, coord[coordKey].xCord, coord[coordKey].yCord, circle+tooltip);
+                }
+            }
+            this.bubble.bubbleAnimation = "";
+            var html = this.svg.drawGroup(CHART_BUBBLE_GROUP_CLASS, 0, 0, tempHtml);
+
+            return html
+        },
+        /**
+         * @name axisData
+         * @description
+         * To get exact coordinated for a bubble according to their x and y values
+         *
+         * @param none
+         * @returns returns an array of objects containing bubble xy coord, radius, colour and tooltip.
+         */
+        bubbleCoordinates: function()
+        {
+            var bubbleCoordinates = [];
+
+            if(Object.prototype.toString.call(this.data) === '[object Array]' && this.data.length > 0)
+            {
+                if(this.bubble.key !== undefined)
+                {
+                    for(var dataKey in this.data)
+                    {
+                        if(this.data.hasOwnProperty(dataKey))
+                        {
+                            var coord = {},
+                                xAxixValue = this.data[dataKey][this.xAxis.key],
+                                yAxixValue = this.data[dataKey][this.yAxis.key];
+
+                            //if they are dates convert them to YYYY year
+                            if(this.xAxis.type === "date")
+                            {
+                                xAxixValue = new Date(this.data[dataKey][this.xAxis.key]).getFullYear();
+                            };
+                            if(this.yAxis.type === "date")
+                            {
+                                yAxixValue = new Date(this.data[dataKey][this.yAxis.key]).getFullYear();
+                            }
+
+                            //deciding on xy coord and bubble radius
+                            var bubbleRadius = (parseInt(this.data[dataKey][this.bubble.key]) / (DEFAULT_POINT_SEPARATION_PIXEL+50)),
+                                xCord = (((DEFAULT_POINT_SEPARATION_PIXEL/this.xAxisPoints["ceil"])
+                                * (xAxixValue - this.xAxisPoints["min"])) + DEFAULT_POINT_SEPARATION_PIXEL + X_AXIS_START_POINT),
+                                yCord = ((window.innerWidth * 0.3) - ((DEFAULT_POINT_SEPARATION_PIXEL/this.yAxisPoints["ceil"])
+                                * (yAxixValue - this.yAxisPoints["min"]))),
+                                colour = this.uniqueLegend[this.data[dataKey][this.legend.key]];
+                            coord = {
+                                "bubbleRadius": (window.innerWidth * bubbleRadius) /6000,
+                                "xCord": xCord,
+                                "yCord": yCord,
+                                "colour": colour,
+                                "tooltip": this.data[dataKey]
+                            };
+
+                            bubbleCoordinates.push(coord);
+                        }
+                    }
+                }
+            }
+            return bubbleCoordinates;
         },
 
         /**

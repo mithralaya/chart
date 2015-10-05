@@ -29,6 +29,11 @@ var options = {
         "key": "sect",
         "refType": "roundRect"  //roundRect, circle, rect
     },
+    "bubble": {
+        "name": "Valuation ($M)",
+        "key": "val",
+        "bubbleAnimation": "bounceIn" //zoomIn or bounceIn
+    },
     data: data
 };
 function init()
