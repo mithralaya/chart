@@ -60,5 +60,72 @@ function getRandomInt(min, max) {
 }
 
 
+function mergeCompany()
+{
+    var indexBySector = dataIndexBySector();
+    var keys = Object.keys(indexBySector);
+    if(keys.length > 0)
+    {
+
+        var randomObjectKey = keys[ keys.length * Math.random() << 0];
+        if(indexBySector[randomObjectKey].length > 1)
+        {
+            var index1 = parseInt(indexBySector[randomObjectKey][0]);
+            var index2 = parseInt(indexBySector[randomObjectKey][1]);
+            var data1 = data[index1];
+            var data2 = data[index2];
+            data.splice(index1, 1);
+            index2 = data.indexOf(data2);
+            data.splice(index2, 1);
+
+
+            var newData = {
+                "incopDate": data2.incopDate,
+                "rev": data1.rev + data2.rev,
+                "val": data1.val + data2.val,
+                "sect": randomObjectKey
+            };
+            if(data1.incopDate < data2.incopDate)
+            {
+                newData["incopDate"] = data1.incopDate;
+            }
+
+            data.splice(index1, 0, newData);
+            init();
+        }
+
+    }
+}
+
+function dataIndexBySector()
+{
+    var indexBySector = {};
+    for(var dataIndex in data)
+    {
+        if(data.hasOwnProperty(dataIndex))
+        {
+            if(indexBySector[data[dataIndex].sect] === undefined)
+            {
+                indexBySector[data[dataIndex].sect] = [];
+            }
+            indexBySector[data[dataIndex].sect].push(dataIndex);
+        }
+    }
+    if(Object.keys(indexBySector).length > 0)
+    {
+        for(var indexBySectorKey in indexBySector)
+        {
+            if(indexBySector.hasOwnProperty(indexBySectorKey))
+            {
+                if(indexBySector[indexBySectorKey].length < 2)
+                {
+                    delete indexBySector[indexBySectorKey];
+                }
+            }
+        }
+    }
+    return indexBySector;
+}
+
 
 window.onresize = function(){init()};
