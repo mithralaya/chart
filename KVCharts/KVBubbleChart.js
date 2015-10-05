@@ -24,6 +24,8 @@ var KVBubbleChart = (function(window, document){
         X_AXIS_START_POINT                      = 75,
         //default starting x position of x axis
         Y_AXIS_START_POINT                      = X_AXIS_START_POINT,
+        //point sepration distance
+        DEFAULT_POINT_SEPARATION_PIXEL          = X_AXIS_START_POINT,
 
 
         DEFUALT_LEGEND_COLOURS                  = ["#FFB347", "#B19CD9", "#3a7bd5", "#D73E68", "#03C03C", "#C23B22", "#CB99C9", "#FFD1DC"],
@@ -62,6 +64,7 @@ var KVBubbleChart = (function(window, document){
         this.title          = options.title;    //chart title options
         this.xAxis          = options.xAxis;    //xaxis options
         this.yAxis          = options.yAxis;    //yaxis options
+        this.data           = options.data;     //user data
         this.element        = element;          //declaring element object where this chart gonna sit
 
         this.build(); //build all svgs and
@@ -164,6 +167,80 @@ var KVBubbleChart = (function(window, document){
             html = this.svg.drawGroup(CHART_YAXIS_GROUP_CLASS, 0, 0, html);
 
             return html;
+        },
+
+        /**
+         * @name axisData
+         * @description
+         * To get all axis points that can be plotted on axis
+         *
+         * @param axis {object}, availableSpace {float}
+         * @returns none.
+         */
+        axisData: function(axis, availableSpace)
+        {
+            var newAxisPoints = {};
+            //check if data exist and that its an arrays
+            if(Object.prototype.toString.call(this.data) === '[object Array]' && this.data.length > 0)
+            {
+                if(axis.key !== undefined)
+                {
+                    var axisData = [];
+                    for(var dataKey in this.data)
+                    {
+                        if(this.data.hasOwnProperty(dataKey))
+                        {
+                            //if the data format is a date convert the timestamp to human readable year
+                            if(axis.type === "date")
+                            {
+                                var value = new Date(this.data[dataKey][axis.key]).getFullYear();
+                            }
+                            else
+                            {
+                                var value = this.data[dataKey][axis.key];
+                            }
+                            axisData.push(value);
+                        }
+                    }
+                    //find min value
+                    var min = Math.min.apply(null, axisData),
+                        //find max value
+                        max = Math.max.apply(null, axisData),
+                        //difference it
+                        diff = (max - min),
+                        //find maximum plottable space using available space and default separation space
+                        floor = Math.floor(availableSpace/DEFAULT_POINT_SEPARATION_PIXEL),
+                        //this will give us the difference in each point
+                        ceil = Math.ceil(diff/floor);
+
+                    newAxisPoints["diff"] = diff;
+                    newAxisPoints["floor"] = floor;
+                    newAxisPoints["ceil"] = ceil;
+                    newAxisPoints["points"] = [];
+                    newAxisPoints["min"] = min;
+
+                    for(var i = 0; i < floor; i++)
+                    {
+                        //add those points to the array
+                        //if the higher point doesnt end at the max then we do multiply the ceil
+                        if(ceil > min)
+                        {
+                            if(i === 0)
+                            {
+                                newAxisPoints["points"].push(min);
+                            }
+                            newAxisPoints["points"].push(ceil * (i+1));
+                        }
+                        else
+                        {
+                            newAxisPoints["points"].push(min);
+                            min += ceil;
+                        }
+                    }
+                }
+            }
+            console.log(newAxisPoints);
+            return newAxisPoints;
         },
 
         /**

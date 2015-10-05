@@ -9,12 +9,22 @@ describe("Chart Title", function() {
     describe("SVG tag", function(){
         it("undefined content should return empty string", function() {
             var options = {
+                "fontFamily": "'HelveticaNeue-Light', Arial, sans-serif",
+
                 "xAxis": {
-                "name": "Incorporation Date (Year)",
+                    "name": "Incorporation Date (Year)",
                     "key": "incopDate",
                     "type": "date",
                     "grid": false
-            }};
+                },
+                "yAxis": {
+                    "name": "Revenue ($M)",
+                    "key": "rev",
+                    "type": "number",
+                    "grid": true
+                },
+                data: data
+            };
             var chart = new KVBubbleChart(options, element);
 
             var output  = '';
@@ -25,17 +35,24 @@ describe("Chart Title", function() {
         it("null content should return empty string", function() {
 
             var options = {
-                title: {
-                    "text": null
+                "fontFamily": "'HelveticaNeue-Light', Arial, sans-serif",
+                "title": {
+                    "text":null
                 },
                 "xAxis": {
                     "name": "Incorporation Date (Year)",
                     "key": "incopDate",
                     "type": "date",
                     "grid": false
-                }
+                },
+                "yAxis": {
+                    "name": "Revenue ($M)",
+                    "key": "rev",
+                    "type": "number",
+                    "grid": true
+                },
+                data: data
             };
-
             var chart = new KVBubbleChart(options, element);
 
             var output  = '';
@@ -44,18 +61,26 @@ describe("Chart Title", function() {
         });
 
         it("non string content should return empty string", function() {
-
             var options = {
-                title: {
-                    "text": 20
+                "fontFamily": "'HelveticaNeue-Light', Arial, sans-serif",
+                "title": {
+                    "text":NaN
                 },
                 "xAxis": {
                     "name": "Incorporation Date (Year)",
                     "key": "incopDate",
                     "type": "date",
                     "grid": false
-                }
+                },
+                "yAxis": {
+                    "name": "Revenue ($M)",
+                    "key": "rev",
+                    "type": "number",
+                    "grid": true
+                },
+                data: data
             };
+
             var chart = new KVBubbleChart(options, element);
 
             var output  = '';
@@ -69,19 +94,9 @@ describe("Chart Title", function() {
                 colour = "#ffffff",
                 fontSize = 19,
                 x = 50.55,
-                y = 50.55,
+                y = 50.55;
 
-                options = {
-                    title: {
-                        "text": "Awesome"
-                    },
-                    "xAxis": {
-                        "name": "Incorporation Date (Year)",
-                        "key": "incopDate",
-                        "type": "date",
-                        "grid": false
-                    }
-                };
+
             var chart = new KVBubbleChart(options, element);
             var output  = '<text class="'+classx+'" x = "50" y = "50"  style="fill: '+colour+'; font-size: '+fontSize+'px;"> '+options.title.text+' </text>';
 
@@ -96,17 +111,7 @@ describe("Chart Title", function() {
             var win = {
                 innerWidth: 1000
             };
-            var options = {
-                title: {
-                    "text": 20
-                },
-                "xAxis": {
-                "name": "Incorporation Date (Year)",
-                    "key": "incopDate",
-                    "type": "date",
-                    "grid": false
-            }
-            };
+
             var chart = new KVBubbleChart(options, element);
 
             var output  = 450;
