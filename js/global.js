@@ -23,7 +23,8 @@ var options = {
         "key": "rev",
         "type": "number",
         "grid": true
-    }
+    },
+    data: data
 };
 function init()
 {
