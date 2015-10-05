@@ -32,20 +32,30 @@ var KVBubbleChart = (function(window, document){
         DEFAULT_AXIS_LINE_COLOUR                = "#aaaaaa",
         DEFAULT_AXIS_TEXT_COLOUR                = "#999999",
         DEFAULT_AXIS_NAME_COLOUR                = "#cccccc",
+        DEFAULT_TITLE_TEXT_COLOUR               = "#333333",
+        DEFAULT_AXIS_POINT_LINE_COLOUR          = "#bbbbbb",
+        DEFAULT_AXIS_POINT_TEXT_COLOUR          = "#666666",
+        DEFAULT_AXIS_GRID_LINE_COLOUR           = "#cccccc",
 
 
         //chart title class name
         CHART_TITLE_CLASS                       = "chartTitle",
         //xaxis
         CHART_XAXIS_LINE_CLASS                  = "xAxisLine",
-        CHART_XAXIS_GROUP_CLASS                 = "CHART_XAXIS_GROUP_CLASS",
+        CHART_XAXIS_GROUP_CLASS                 = "xAxis",
         CHART_XAXIS_TITLE_CLASS                 = "xAxisTitle",
         CHART_XAXIS_NAME_CLASS                  = "xAxisName",
+        CHART_XAXIS_POINT_LINES_CLASS           = "xAxisPointLines",
+        CHART_XAXIS_POINT_TEXT_CLASS            = "xAxisPointText",
+        CHART_XAXIS_GRID_LINE_CLASS             = "xAxisGridLine",
         //yaxis
         CHART_YAXIS_LINE_CLASS                  = "yAxisLine",
         CHART_YAXIS_GROUP_CLASS                 = "yAxis",
         CHART_YAXIS_NAME_CLASS                  = "yAxisName",
-        CHART_YAXIS_TITLE_CLASS                 = "yAxisTitle";
+        CHART_YAXIS_TITLE_CLASS                 = "yAxisTitle",
+        CHART_YAXIS_POINT_LINES_CLASS           = "yAxisPointLines",
+        CHART_YAXIS_POINT_TEXT_CLASS            = "yAxisPointText",
+        CHART_YAXIS_GRID_LINE_CLASS             = "yAxisGridLine";
 
 
 
@@ -66,6 +76,8 @@ var KVBubbleChart = (function(window, document){
         this.yAxis          = options.yAxis;    //yaxis options
         this.data           = options.data;     //user data
         this.element        = element;          //declaring element object where this chart gonna sit
+        this.xAxisPoints    = [];
+        this.yAxisPoints    = [];
 
         this.build(); //build all svgs and
         this.align(); //align chart elements
@@ -120,10 +132,27 @@ var KVBubbleChart = (function(window, document){
                 y2 = y1,
                 //pick default of user supplied line colour
                 lineColour = (this.xAxis.lineColour !== undefined)? this.xAxis.lineColour: DEFAULT_AXIS_LINE_COLOUR;
+            this.xAxisPoints = this.axisData(this.xAxis, x2 - x1);
 
 
             //draw xaxis line
             var html = this.svg.drawLine(CHART_XAXIS_LINE_CLASS, x1, y1, x2, y2, lineColour, 2);
+
+            //plotting points
+            for(var axisPointsKey in this.xAxisPoints["points"])
+            {
+                if(this.xAxisPoints["points"].hasOwnProperty(axisPointsKey))
+                {
+                    var incrementX = ((x1) * (parseInt(axisPointsKey)+1)) + DEFAULT_POINT_SEPARATION_PIXEL;
+                    html += this.svg.drawLine(CHART_XAXIS_POINT_LINES_CLASS, incrementX, y1, incrementX, y2+8, DEFAULT_AXIS_POINT_LINE_COLOUR, 2);
+                    html += this.svg.drawText(CHART_XAXIS_POINT_TEXT_CLASS, incrementX, (y1+40), DEFAULT_AXIS_POINT_TEXT_COLOUR, 14,
+                        this.xAxisPoints["points"][axisPointsKey].toString(), "rotate(300 "+incrementX+","+(y1+50)+")");
+                    if(this.xAxis.grid)
+                    {
+                        html += this.svg.drawLine(CHART_XAXIS_GRID_LINE_CLASS, incrementX, Y_AXIS_START_POINT, incrementX, y2, DEFAULT_AXIS_GRID_LINE_COLOUR, 1, true);
+                    }
+                }
+            }
             //draw xaxis title
             html += this.svg.drawText(CHART_XAXIS_TITLE_CLASS, (x2-200), (y1-7), DEFAULT_AXIS_TEXT_COLOUR,
                 16, this.xAxis.name.toUpperCase());
@@ -153,10 +182,28 @@ var KVBubbleChart = (function(window, document){
                 //yaxis should be 1/3 of x axis
                 y2 = windowWidth * 0.3,
                 lineColour = (this.yAxis.lineColour !== undefined)? this.yAxis.lineColour: DEFAULT_AXIS_LINE_COLOUR;
+            this.yAxisPoints = this.axisData(this.yAxis, y2 - y1);
 
 
             //draw yaxis line
             var html = this.svg.drawLine(CHART_YAXIS_LINE_CLASS, x1, y1, x2, y2, lineColour, 2);
+            //plotting points
+            var decrementY = y2;
+            for(var axisPointsKey in this.yAxisPoints["points"])
+            {
+                if(this.yAxisPoints["points"].hasOwnProperty(axisPointsKey))
+                {
+                    html += this.svg.drawLine(CHART_YAXIS_POINT_LINES_CLASS, x1-8, decrementY, x2, decrementY, DEFAULT_AXIS_POINT_LINE_COLOUR, 2);
+                    html += this.svg.drawText(CHART_YAXIS_POINT_TEXT_CLASS, x1 - 35, decrementY+5, DEFAULT_AXIS_POINT_TEXT_COLOUR, 14,
+                        this.yAxisPoints["points"][axisPointsKey].toString());
+                    if(this.yAxis.grid)
+                    {
+                        html += this.svg.drawLine(CHART_YAXIS_GRID_LINE_CLASS, x1, decrementY, window.innerWidth - Y_AXIS_START_POINT, decrementY, DEFAULT_AXIS_GRID_LINE_COLOUR, 1, true);
+                    }
+                    decrementY = decrementY - DEFAULT_POINT_SEPARATION_PIXEL;
+                }
+            }
+
             //draw yaxis name
             html += this.svg.drawText(CHART_YAXIS_NAME_CLASS, (X_AXIS_START_POINT - 2), (y1-20), DEFAULT_AXIS_NAME_COLOUR, 18, "y");
             //draw yaxis title
@@ -239,7 +286,6 @@ var KVBubbleChart = (function(window, document){
                     }
                 }
             }
-            console.log(newAxisPoints);
             return newAxisPoints;
         },
 
@@ -256,6 +302,7 @@ var KVBubbleChart = (function(window, document){
             this.alignChartTitle();
             this.alignXAxisTitle();
             this.alignYAxisTitle();
+            this.alignYAxisPointText();
 
             //align the hight of the element div to the content of the chart
             this.element.style.height = (window.innerWidth * 0.3) + 175 +"px";
@@ -309,6 +356,34 @@ var KVBubbleChart = (function(window, document){
                 yAxisTitleWidth = parseInt(yAxisTitle.offsetWidth);
 
             yAxisTitle.setAttribute("x", 106 - yAxisTitleWidth);
+        },
+
+        /**
+         * @name alignYAxisPointText
+         * @description
+         * To right align all text on the y axis points
+         *
+         * @param none
+         * @returns none.
+         */
+        alignYAxisPointText: function()
+        {
+            var yAxisPointsText = document.getElementsByClassName(CHART_YAXIS_POINT_TEXT_CLASS);
+
+            //for each points
+            for(var yAxisPointsTextIndex in yAxisPointsText)
+            {
+                if(yAxisPointsText.hasOwnProperty(yAxisPointsTextIndex))
+                {
+                    //right align all text
+                    var yAxisPointTextWidth = parseInt(yAxisPointsText[yAxisPointsTextIndex].offsetWidth);
+                    if(typeof yAxisPointsText[yAxisPointsTextIndex] === 'object')
+                    {
+                        yAxisPointsText[yAxisPointsTextIndex].setAttribute("x", X_AXIS_START_POINT - 15 - yAxisPointTextWidth);
+
+                    }
+                }
+            }
         },
 
         /**
