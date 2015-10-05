@@ -311,12 +311,13 @@ var KVBubbleChart = (function(window, document){
                     tooltipText += this.svg.drawText(CHART_BUBBLE_TOOLTIP_TEXT_CLASS, 100, 140, '#333333', 12,  this.yAxis.name + ": " +coord[coordKey].tooltip[this.yAxis.key]);
                     tooltipText += this.svg.drawText(CHART_BUBBLE_TOOLTIP_TEXT_CLASS, 100, 160, '#333333', 12,  this.bubble.name + ": " +coord[coordKey].tooltip[this.bubble.key]);
                     tooltipText += this.svg.drawText(CHART_BUBBLE_TOOLTIP_TEXT_CLASS, 100, 180, '#333333', 12,  this.legend.name + ": " +coord[coordKey].tooltip[this.legend.key]);
-
+                    //add them to the group
                     var tooltipTextGroup = this.svg.drawGroup(CHART_BUBBLE_TOOLTIP_TEXT_GROUP_CLASS, -85, -96, tooltipText);
                     var tooltip = this.svg.drawGroup(CHART_BUBBLE_TOOLTIP_GROUP_CLASS, -100, -120, tooltipRect + tooltipTextGroup);
                     tempHtml += this.svg.drawGroup(CHART_BUBBLE_ITEM_GROUP_CLASS, coord[coordKey].xCord, coord[coordKey].yCord, circle+tooltip);
                 }
             }
+            //remove animation for future addition of bubbles to the chart
             this.bubble.bubbleAnimation = "";
             var html = this.svg.drawGroup(CHART_BUBBLE_GROUP_CLASS, 0, 0, tempHtml);
 
