@@ -676,7 +676,8 @@ var KVBubbleChart = (function(window, document){
             //reset inner html of the element before plotting
             this.element.innerHTML   = "";
             var html = this.chartTitle() + this.chartXAxis()
-                    + this.chartYAxis() + this.chartLegend();
+                    + this.chartYAxis() + this.chartLegend()
+                    + this.chartBubble();
             this.element.innerHTML = this.svg.drawSVG(DEFAULT_FONT_FAMILY, html);
         }
     };
