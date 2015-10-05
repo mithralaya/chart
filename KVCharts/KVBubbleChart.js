@@ -41,7 +41,9 @@ var KVBubbleChart = (function(window, document){
         CHART_XAXIS_NAME_CLASS                  = "xAxisName",
         //yaxis
         CHART_YAXIS_LINE_CLASS                  = "yAxisLine",
-        CHART_YAXIS_GROUP_CLASS                 = "yAxis";
+        CHART_YAXIS_GROUP_CLASS                 = "yAxis",
+        CHART_YAXIS_NAME_CLASS                  = "yAxisName",
+        CHART_YAXIS_TITLE_CLASS                 = "yAxisTitle";
 
 
 
@@ -141,7 +143,6 @@ var KVBubbleChart = (function(window, document){
 
         chartYAxis: function()
         {
-
             var windowWidth = window.innerWidth,
                 x1 = X_AXIS_START_POINT,
                 y1 = Y_AXIS_START_POINT,
@@ -153,6 +154,11 @@ var KVBubbleChart = (function(window, document){
 
             //draw yaxis line
             var html = this.svg.drawLine(CHART_YAXIS_LINE_CLASS, x1, y1, x2, y2, lineColour, 2);
+            //draw yaxis name
+            html += this.svg.drawText(CHART_YAXIS_NAME_CLASS, (X_AXIS_START_POINT - 2), (y1-20), DEFAULT_AXIS_NAME_COLOUR, 18, "y");
+            //draw yaxis title
+            html += this.svg.drawText(CHART_YAXIS_TITLE_CLASS, (x2-70), (y1+20), DEFAULT_AXIS_TEXT_COLOUR, 16,
+                    this.yAxis.name.toUpperCase(), "rotate(270 90,90)");
 
             //put all in a group
             html = this.svg.drawGroup(CHART_YAXIS_GROUP_CLASS, 0, 0, html);
