@@ -47,6 +47,24 @@ var KVSVG = (function(window, document){
         },
 
         /**
+         * @name drawSVGElement
+         * @description
+         * To draw a svg scaffold to wrap all svg element
+         *
+         * @param classx {string}, x {float}, y {float}, content {string}
+         * @returns svg tag with properties and content.
+         */
+        drawSVGElement: function(classx, x, y, content)
+        {
+            if(content !== undefined && typeof content === 'string' && content.length > 0) {
+                x = (x !== undefined) ? 'x = "' + x + '"' : '';
+                y = (y !== undefined) ? 'y = "' + y + '"' : '';
+                return '<svg class="' + classx + '" ' + x + ' ' + y + '>' + content + '</svg>';
+            }
+            return '';
+        },
+
+        /**
          * @name drawText
          * @description
          * To draw a svg text tag with properties
@@ -90,6 +108,46 @@ var KVSVG = (function(window, document){
                 return '<line  class="'+classx+'" '+dottedLines+' '+x1t+'  '+y1t+' '+x2t+' '+y2t+' style="stroke:'+lineColour+';stroke-width:'+strokeWidth+'"></line>';
             }
             return '';
+
+        },
+
+        /**
+         * @name drawRect
+         * @description
+         * To draw a svg rectangle tag with properties
+         *
+         * @param classx {string}, x {float}, y {float}, height {float}, width {float}, rx {int}, ry {int}, strokeColour {string}, fillColour {string}
+         * @returns svg rect tag with properties.
+         */
+        drawRect: function(classx, x, y, height, width, rx, ry, strokeColour, fillColour)
+        {
+            x = (x !== undefined)? 'x = "'+x+'"': '';
+            y = (y !== undefined)? 'y = "'+y+'"': '';
+            height = (height !== undefined)? 'height = "'+height+'"': '';
+            width = (width !== undefined)? 'width = "'+width+'"': '';
+            rx = (rx !== undefined)? 'rx = "'+rx+'"': '';
+            ry = (ry !== undefined)? 'rx = "'+ry+'"': '';
+            strokeColour = (strokeColour !== undefined)? 'stroke: '+strokeColour+';' : '';
+            fillColour = (fillColour !== undefined)? 'fill: '+fillColour+';' : '';
+            return '<rect class="'+classx+'" '+x+' '+y+' '+height+' '+width+' '+rx+' '+ry+' style="'+strokeColour+' '+fillColour+'" />';
+        },
+
+        /**
+         * @name drawCircle
+         * @description
+         * To draw a svg line tag with properties
+         *
+         * @param classx {string}, cx {float}, xy {float}, r {float}, strokeColour {string}, fillColour {string}, fillOpacity {float}
+         * @returns svg line tag with properties.
+         */
+        drawCircle: function(classx, cx, cy, r, strokeColour, fillColour, fillOpacity)
+        {
+            cx = (cx !== undefined)? 'cx = "'+cx+'"': '';
+            cy = (cy !== undefined)? 'cy = "'+cy+'"': '';
+            strokeColour = (strokeColour !== undefined)? 'stroke: '+strokeColour+';' : '';
+            fillColour = (fillColour !== undefined)? 'fill: '+fillColour+';' : '';
+            fillOpacity = (fillOpacity !== undefined)? 'fill-opacity: '+fillOpacity+';' : '';
+            return '<circle class="'+classx+'" '+cx+' '+cy+' r="'+r+'" style="'+strokeColour+' '+fillColour+' '+fillOpacity+'"/>';
 
         },
 

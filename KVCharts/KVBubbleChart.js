@@ -26,7 +26,7 @@ var KVBubbleChart = (function(window, document){
         Y_AXIS_START_POINT                      = X_AXIS_START_POINT,
         //point sepration distance
         DEFAULT_POINT_SEPARATION_PIXEL          = X_AXIS_START_POINT,
-
+        DEFAULT_LEGEND_REF_SIZE                 = 30,
 
         DEFUALT_LEGEND_COLOURS                  = ["#FFB347", "#B19CD9", "#3a7bd5", "#D73E68", "#03C03C", "#C23B22", "#CB99C9", "#FFD1DC"],
         DEFAULT_AXIS_LINE_COLOUR                = "#aaaaaa",
@@ -55,7 +55,12 @@ var KVBubbleChart = (function(window, document){
         CHART_YAXIS_TITLE_CLASS                 = "yAxisTitle",
         CHART_YAXIS_POINT_LINES_CLASS           = "yAxisPointLines",
         CHART_YAXIS_POINT_TEXT_CLASS            = "yAxisPointText",
-        CHART_YAXIS_GRID_LINE_CLASS             = "yAxisGridLine";
+        CHART_YAXIS_GRID_LINE_CLASS             = "yAxisGridLine",
+        //legends
+        CHART_LEGEND_GROUP_CLASS                = "legendRef",
+        CHART_UNIQUE_LEGEND_GROUP_CLASS         = "uniqueLegendRef",
+        CHART_LEGEND_REF_TEXT_CLASS             = "legendRefText",
+        CHART_LEGEND_REF_COLOUR_CLASS           = "legendRefColour";
 
 
 
@@ -74,10 +79,13 @@ var KVBubbleChart = (function(window, document){
         this.title          = options.title;    //chart title options
         this.xAxis          = options.xAxis;    //xaxis options
         this.yAxis          = options.yAxis;    //yaxis options
+        this.legend         = options.legend;   //legend options
         this.data           = options.data;     //user data
         this.element        = element;          //declaring element object where this chart gonna sit
         this.xAxisPoints    = [];
         this.yAxisPoints    = [];
+        this.uniqueLegend   = this.uniqueLegend();
+
 
         this.build(); //build all svgs and
         this.align(); //align chart elements
@@ -212,6 +220,54 @@ var KVBubbleChart = (function(window, document){
 
             //put all in a group
             html = this.svg.drawGroup(CHART_YAXIS_GROUP_CLASS, 0, 0, html);
+
+            return html;
+        },
+
+        /**
+         * @name chartLegend
+         * @description
+         * To draw all footer legend refs
+         *
+         * @param none
+         * @returns svg elements of legend with properties and content.
+         */
+        chartLegend: function()
+        {
+            var html = '';
+
+            for(var sector in this.uniqueLegend)
+            {
+                if(this.uniqueLegend.hasOwnProperty(sector))
+                {
+                    var tempHtml = '';
+                    //check if the legend ref is roundRect rect or circle default is roundRect
+                    switch(this.legend.refType)
+                    {
+                        case 'roundRect':
+                            tempHtml += this.svg.drawRect(CHART_LEGEND_REF_COLOUR_CLASS, 0, 0, DEFAULT_LEGEND_REF_SIZE, DEFAULT_LEGEND_REF_SIZE, 8, 8, undefined, this.uniqueLegend[sector]);
+                            break;
+                        case 'rect':
+                            tempHtml += this.svg.drawRect(CHART_LEGEND_REF_COLOUR_CLASS, 0, 0, DEFAULT_LEGEND_REF_SIZE, DEFAULT_LEGEND_REF_SIZE, 0, 0, undefined, this.uniqueLegend[sector]);
+                            break;
+                        case 'circle':
+                            tempHtml += this.svg.drawCircle(CHART_LEGEND_REF_COLOUR_CLASS, 15, 15, DEFAULT_LEGEND_REF_SIZE/2, undefined, this.uniqueLegend[sector]);
+                            break;
+                        default:
+                            tempHtml += this.svg.drawRect(CHART_LEGEND_REF_COLOUR_CLASS, 0, 0, DEFAULT_LEGEND_REF_SIZE, DEFAULT_LEGEND_REF_SIZE, 5, 5, undefined, this.uniqueLegend[sector]);
+                            break;
+                    }
+                    tempHtml += this.svg.drawText(CHART_LEGEND_REF_TEXT_CLASS, DEFAULT_LEGEND_REF_SIZE + 10, 20, DEFAULT_AXIS_TEXT_COLOUR,
+                        16, sector);
+
+                    html += this.svg.drawSVGElement(CHART_UNIQUE_LEGEND_GROUP_CLASS, 0, 0, tempHtml);
+                }
+            }
+
+
+            var x = X_AXIS_START_POINT,
+                y = window.innerWidth * 0.3,
+                html = this.svg.drawGroup(CHART_LEGEND_GROUP_CLASS, x, y+75, html);
 
             return html;
         },
@@ -403,6 +459,48 @@ var KVBubbleChart = (function(window, document){
 
             return centre;
         },
+        /**
+         * @name uniqueLegend
+         * @description
+         * Will bring only unique legends and its colours
+         *
+         * @param none
+         * @returns object ofunique legends and its colours
+         */
+        uniqueLegend: function()
+        {
+            var uniqueLegend = {};
+            if(Object.prototype.toString.call(this.data) === '[object Array]' && this.data.length > 0)
+            {
+                if(this.legend.key !== undefined)
+                {
+                    //check if there are user supplied colours
+                    var colours = (this.legend.colours !== undefined
+                    && Object.prototype.toString.call(this.legend.colours) === '[object Array]'
+                    && this.legend.colours.length > 0)
+                        ? this.legend.colours : DEFUALT_LEGEND_COLOURS;
+                    var noOfColours = colours.length;
+                    var incrementor = 0;
+
+                    for (var dataKey in this.data)
+                    {
+                        if(this.data.hasOwnProperty(dataKey))
+                        {
+                            if(uniqueLegend[this.data[dataKey][this.legend.key]] === undefined)
+                            {
+                                //set unique sector and its colours
+                                uniqueLegend[this.data[dataKey][this.legend.key]] = colours[incrementor];
+                                //chech of we still hve colours if not reset to repeat
+                                incrementor = (noOfColours === (incrementor+1))?  0 : incrementor+1;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            return uniqueLegend;
+        },
 
         /**
          * @name build
@@ -417,7 +515,7 @@ var KVBubbleChart = (function(window, document){
             //reset inner html of the element before plotting
             this.element.innerHTML   = "";
             var html = this.chartTitle() + this.chartXAxis()
-                    + this.chartYAxis();
+                    + this.chartYAxis() + this.chartLegend();
             this.element.innerHTML = this.svg.drawSVG(DEFAULT_FONT_FAMILY, html);
         }
     };

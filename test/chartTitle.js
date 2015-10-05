@@ -23,6 +23,11 @@ describe("Chart Title", function() {
                     "type": "number",
                     "grid": true
                 },
+                "legend": {
+                    "name": "Sector",
+                    "key": "sect",
+                    "refType": "roundRect"  //roundRect, circle, rect
+                },
                 data: data
             };
             var chart = new KVBubbleChart(options, element);
@@ -51,6 +56,11 @@ describe("Chart Title", function() {
                     "type": "number",
                     "grid": true
                 },
+                "legend": {
+                    "name": "Sector",
+                    "key": "sect",
+                    "refType": "roundRect"  //roundRect, circle, rect
+                },
                 data: data
             };
             var chart = new KVBubbleChart(options, element);
@@ -77,6 +87,11 @@ describe("Chart Title", function() {
                     "key": "rev",
                     "type": "number",
                     "grid": true
+                },
+                "legend": {
+                    "name": "Sector",
+                    "key": "sect",
+                    "refType": "roundRect"  //roundRect, circle, rect
                 },
                 data: data
             };

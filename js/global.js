@@ -24,6 +24,11 @@ var options = {
         "type": "number",
         "grid": true
     },
+    "legend": {
+        "name": "Sector",
+        "key": "sect",
+        "refType": "roundRect"  //roundRect, circle, rect
+    },
     data: data
 };
 function init()
