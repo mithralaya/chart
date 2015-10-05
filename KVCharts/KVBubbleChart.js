@@ -178,6 +178,10 @@ var KVBubbleChart = (function(window, document){
         {
             this.alignChartTitle();
             this.alignXAxisTitle();
+            this.alignYAxisTitle();
+
+            //align the hight of the element div to the content of the chart
+            this.element.style.height = (window.innerWidth * 0.3) + 175 +"px";
         },
 
         /**
@@ -212,6 +216,22 @@ var KVBubbleChart = (function(window, document){
                 xAxisTitleWidth = parseInt(xAxisTitle.offsetWidth);
 
             xAxisTitle.setAttribute("x", (xAxisLength - xAxisTitleWidth));
+        },
+
+        /**
+         * @name alignXAxisTitle
+         * @description
+         * To set xaxis title text to align with the end of xAxis line
+         *
+         * @param none
+         * @returns none.
+         */
+        alignYAxisTitle: function()
+        {
+            var yAxisTitle = document.getElementsByClassName(CHART_YAXIS_TITLE_CLASS)[0],
+                yAxisTitleWidth = parseInt(yAxisTitle.offsetWidth);
+
+            yAxisTitle.setAttribute("x", 106 - yAxisTitleWidth);
         },
 
         /**
