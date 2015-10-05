@@ -359,6 +359,7 @@ var KVBubbleChart = (function(window, document){
             this.alignXAxisTitle();
             this.alignYAxisTitle();
             this.alignYAxisPointText();
+            this.alignLegend();
 
             //align the hight of the element div to the content of the chart
             this.element.style.height = (window.innerWidth * 0.3) + 175 +"px";
@@ -412,6 +413,59 @@ var KVBubbleChart = (function(window, document){
                 yAxisTitleWidth = parseInt(yAxisTitle.offsetWidth);
 
             yAxisTitle.setAttribute("x", 106 - yAxisTitleWidth);
+        },
+
+        /**
+         * @name alignLegend
+         * @description
+         * To set spacing for legend and should knock line if it reached end
+         *
+         * @param none
+         * @returns none.
+         */
+        alignLegend:function()
+        {
+            var legend = document.getElementsByClassName(CHART_UNIQUE_LEGEND_GROUP_CLASS);
+
+            var legendx = 0, legendy = 0, secondLine = false;
+            for(var key in legend)
+            {
+                if(legend.hasOwnProperty(key) && typeof legend[key] === 'object')
+                {
+                    //legend[key].setAttribute("transform", "translate("+legendx+", "+legendy+")");
+                    //set initial x and y coords
+                    legend[key].setAttribute("x", legendx);
+                    legend[key].setAttribute("y", legendy);
+                    var colourWidth = DEFAULT_LEGEND_REF_SIZE;
+                    //find text width
+                    var textWidth = parseInt(document.getElementsByClassName(CHART_LEGEND_REF_TEXT_CLASS)[key].offsetWidth);
+
+                    var margin = 20; // add 20 margin between legends
+                    var spacing = 10; // add 10 spacing between legend colour and text
+                    legendx += colourWidth + textWidth + margin + spacing; //add them all to gether
+
+                    var maxWidth = window.innerWidth - Y_AXIS_START_POINT;
+
+                    if(legendx > maxWidth)
+                    {
+
+                        //if secondline then the last legend will knock to second line
+                        if(!secondLine){
+                            legendx = 0;
+                            secondLine=true;
+                        }
+
+                        legendy = DEFAULT_LEGEND_REF_SIZE + margin;
+                        if(legend[key + 1] !== undefined)
+                        {
+                            //legend[key + 1].setAttribute("transform", "translate("+legendx+", "+legendy+")");
+                            legend[key].setAttribute("x", legendx);
+                            legend[key].setAttribute("y", legendy);
+                        }
+
+                    }
+                }
+            }
         },
 
         /**
