@@ -5,8 +5,7 @@
  */
 
 html,
-body,
-div {
+body{
     margin: 0;
     border: 0 none;
     padding: 0;
@@ -53,7 +52,7 @@ body{
 #mergeButton:active{
     background: #AB5044;
 }
-.pleaseAdd{display:none; color:#D73E68; font-weight: 500;}
+.pleaseAdd{display:none; color:#D73E68; font-weight: 500;margin-top:10px;}
 .animate {
     -webkit-animation-duration: 1s;
     animation-duration: 1s;

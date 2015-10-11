@@ -387,6 +387,7 @@ var KVBubbleChart = (function(window, document){
          *
          * @param axis {object}, availableSpace {float}
          * @returns none.
+         * @todo Date formate only does Year now, it should extend to full date.
          */
         axisData: function(axis, availableSpace)
         {

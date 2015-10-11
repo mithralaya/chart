@@ -6,48 +6,50 @@
  * Global JS which will load on index.html
  */
 
-//options initialisation
-var options = {
-    "fontFamily": "'HelveticaNeue-Light', Arial, sans-serif",
-    "title": {
-        "text": "Mergermarket Companies",
-        "fontSize": 28
-    },
-    "xAxis": {
-        "name": "Incorporation Date (Year)",
-        "key": "incopDate",
-        "type": "date",
-        "grid": false
-    },
-    "yAxis": {
-        "name": "Revenue ($M)",
-        "key": "rev",
-        "type": "number",
-        "grid": true
-    },
-    "legend": {
-        "name": "Sector",
-        "key": "sect",
-        "refType": "roundRect"  //roundRect, circle, rect
-    },
-    "bubble": {
-        "name": "Valuation ($M)",
-        "key": "val",
-        "bubbleAnimation": "bounceIn" //zoomIn or bounceIn
-    },
-    data: data
-};
-var sectors = ["Energy", "Automobile", "Services", "Agriculture", "Commodities"];
+
 
 //init KVBubbleChart
 function init()
 {
+    //options initialisation
+    var options = {
+        "fontFamily": "'HelveticaNeue-Light', Arial, sans-serif",
+        "title": {
+            "text": "Bubble Chart",
+            "fontSize": 28
+        },
+        "xAxis": {
+            "name": "Incorporation Date (Year)",
+            "key": "incopDate",
+            "type": "date",
+            "grid": false
+        },
+        "yAxis": {
+            "name": "Revenue ($M)",
+            "key": "rev",
+            "type": "number",
+            "grid": true
+        },
+        "legend": {
+            "name": "Sector",
+            "key": "sect",
+            "refType": "roundRect"  //roundRect, circle, rect
+        },
+        "bubble": {
+            "name": "Valuation ($M)",
+            "key": "val",
+            "bubbleAnimation": "bounceIn" //zoomIn or bounceIn or emptyString for no animation
+        },
+        data: data
+    };
+
     new KVBubbleChart(options, document.getElementById("bubbleChart"));
 }
 
 //add a random company button
 function addCompany()
 {
+    var sectors = ["Energy", "Automobile", "Services", "Agriculture", "Commodities"];
     document.getElementById("pleaseAdd").style.display = "none";
     var newCompany = {
         "incopDate": getRandomInt(465599466000, 1443820266000),// get random int between range

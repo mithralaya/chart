@@ -28,6 +28,11 @@ describe("Chart Title", function() {
                     "key": "sect",
                     "refType": "roundRect"  //roundRect, circle, rect
                 },
+                "bubble": {
+                    "name": "Valuation ($M)",
+                    "key": "val",
+                    "bubbleAnimation": "bounceIn" //zoomIn or bounceIn
+                },
                 data: data
             };
             var chart = new KVBubbleChart(options, element);
@@ -61,6 +66,11 @@ describe("Chart Title", function() {
                     "key": "sect",
                     "refType": "roundRect"  //roundRect, circle, rect
                 },
+                "bubble": {
+                    "name": "Valuation ($M)",
+                    "key": "val",
+                    "bubbleAnimation": "bounceIn" //zoomIn or bounceIn
+                },
                 data: data
             };
             var chart = new KVBubbleChart(options, element);
@@ -92,6 +102,11 @@ describe("Chart Title", function() {
                     "name": "Sector",
                     "key": "sect",
                     "refType": "roundRect"  //roundRect, circle, rect
+                },
+                "bubble": {
+                    "name": "Valuation ($M)",
+                    "key": "val",
+                    "bubbleAnimation": "bounceIn" //zoomIn or bounceIn
                 },
                 data: data
             };
